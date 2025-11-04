@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "dev": "vite"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.18"
+  },
+  "devDependencies": {
+    "vite": "^7.1.12"
+  }
+}
