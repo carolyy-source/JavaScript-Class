@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <link rel="stylesheet" href="../../../reset.css" />
+  </head>
+  <body>
+    <!-- 雙向綁定 -->
+    <div x-data="{message: ''}">
+      <input type="text" x-model.trim="message" />
+      <!-- 測試雙向綁定
+       <span x-text="message"></span> -->
+      <!-- x-bind:disable => x-bind可省略不寫 -->
+      <button x-bind:disabled="message == ''">click</button>
+    </div>
+  </body>
+</html>
