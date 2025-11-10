@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="//unpkg.com/alpinejs" defer></script>
+  </head>
+  <body>
+    <form x-data action="/a.php">
+      <button @click.prevent="console.log('hello')">click</button>
+    </form>
+
+    <!-- 雙向綁定 -->
+    <div x-data="{message: 'hello'}">
+      <input x-model="message" type="text" />
+      <input type="text" />
+      <span x-text="message"></span>
+      <button>click</button>
+    </div>
+  </body>
+</html>
