@@ -1,14 +1,22 @@
 import axios from "axios"
+import { debounce } from "throttle-debounce"
 
 /*
-
 x-data 用來宣告 Alpine 的元件。
 x-show 用來根據布林值（true 或 false）來切換元素的顯示與隱藏狀態。
 x-model 替元素附加「雙向資料繫結」，可以用來做雙向綁定
 x-model.trim 可以去除頭尾的空白  -->密碼欄位不要用
+
+find->找到物件  findindex->找到索引值
+debounce 在事件「停止一段時間」後才執行。
+throttle 固定間隔時間內，只允許執行一次。
+
 */
 
 //把使用的code全部放在changeSection中，一起打包到todo.js
+
+//利用debounce阻止惡意連點->在toggleTask使用
+
 function changeSection() {
   return {
     change_section: "",
@@ -118,15 +126,38 @@ function changeSection() {
       this.password = ""
       this.nickname = ""
     },
+    //避免箭頭函數
+
+    toggleDebounce: debounce(1000, function (id, count) {
+      console.log(count)
+
+      if (count % 2 != 0) {
+        console.log("GO!")
+      }
+
+      // axios.patch(`https://todoo.5xcamp.us/todos/${id}/toggle`, null, this.setConfig())
+    }),
 
     async toggleTask(id) {
-      const idx = this.tasks.findIndex((t) => t.id === id)
+      //假
+      const todo = this.tasks.find((t) => t.id == id)
 
-      if (idx >= 0) {
-        const resp = await axios.patch(`https://todoo.5xcamp.us/todos/${id}/toggle`, null, this.setConfig())
-
-        console.log(resp)
+      if (todo.completed_at) {
+        //console.log("已完成")
+        todo.completed_at = null
+      } else {
+        //console.log("未完成")
+        todo.completed_at = new Date()
       }
+
+      //紀錄點擊次數
+      if (todo.count == null) {
+        todo.count = 0
+      }
+      todo.count = todo.count + 1
+
+      //真->從點擊次數判斷是否需要打API
+      this.toggleDebounce(id, todo.count)
     },
 
     deleteTask(id) {
@@ -160,21 +191,21 @@ function changeSection() {
           content: this.taskName,
           completed_at: null,
         }
-
+        // 將新增的task新增至上方框
         this.tasks.unshift(dummyTask)
+
+        // 清除輸入框
+        this.taskName = ""
 
         // 真做>在將資料傳送到api
         const resp = await axios.post("https://todoo.5xcamp.us/todos", todoData, config)
 
-        // 換成資料內部真正的id
+        // 切換成資料內部真正的id
         const newTask = resp.data
         const idx = this.tasks.findIndex((t) => {
           return t.id == dummyTask.id
         })
         this.tasks.splice(idx, 1, newTask)
-
-        // 清除
-        this.taskName = ""
       }
     },
     //切換登入&註冊視窗
