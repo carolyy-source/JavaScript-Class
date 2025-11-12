@@ -102,6 +102,7 @@ function changeSection() {
       if (email != "" && nickname != "" && password != "") {
         const userData = {
           user: {
+            //email : email,
             //已經用this了，可以只寫email
             email,
             nickname,
@@ -109,11 +110,11 @@ function changeSection() {
           },
         }
 
-        //axios.post() 會將第二個參數 data（可以是物件、FormData 等格式作為請求的資料主體發送到伺服器。
+        //axios.post() 會將第二個參數 data（可以是物件、FormData) 等格式作為請求的資料主體發送到伺服器。
         try {
           await axios.post("https://todoo.5xcamp.us/users", userData)
           this.resetForm() //成功註冊後，清除頁面上資料
-          this.gotoLogin() //跳轉登入欄
+          this.gotoLogin() //跳轉登入欄 (html增加@click.prevent阻止按鈕點擊後回到原頁面)
         } catch (err) {
           alert(err.response.data.message)
         }
