@@ -2,20 +2,20 @@ import axios from "axios"
 import { debounce } from "throttle-debounce"
 
 /*
+API:應用程式介面
+打API => 透過API去跟其他軟體、服務或伺服器交換資料或功能。
 x-data 用來宣告 Alpine 的元件。
 x-show 用來根據布林值（true 或 false）來切換元素的顯示與隱藏狀態。
 x-model 替元素附加「雙向資料繫結」，可以用來做雙向綁定
 x-model.trim 可以去除頭尾的空白  -->密碼欄位不要用
 
-find->找到物件  findindex->找到索引值
+find->找到物件f[0].f[1].f[2]  findindex->找到索引值0.1.2
 debounce 在事件「停止一段時間」後才執行。
 throttle 固定間隔時間內，只允許執行一次。
-
+利用debounce阻止惡意連點->在toggleTask使用
 */
 
 //把使用的code全部放在changeSection中，一起打包到todo.js
-
-//利用debounce阻止惡意連點->在toggleTask使用
 
 function changeSection() {
   return {
@@ -81,8 +81,10 @@ function changeSection() {
 
         try {
           const resp = await axios.post("https://todoo.5xcamp.us/users/sign_in", userData)
+          //讀取token資訊
           const token = resp.headers.authorization
 
+          //setItem->設定一組資料，但型態為字串
           if (token) {
             localStorage.setItem("todoToken", token)
             this.isLogin = true
