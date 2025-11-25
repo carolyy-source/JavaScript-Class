@@ -1,4 +1,5 @@
 import axios from "axios"
+//axios的使用規則在gitHub中
 import { debounce } from "throttle-debounce"
 
 /*
@@ -132,13 +133,15 @@ function changeSection() {
     //避免箭頭函數
 
     toggleDebounce: debounce(1000, function (id, count) {
+      const { conut } = todo
+      //reset count
+      todo.count = 0
       console.log(count)
 
       if (count % 2 != 0) {
-        console.log("GO!")
+        //判斷奇數次 click
+        axios.patch(`https://todoo.5xcamp.us/todos/${id}/toggle`, null, this.setConfig())
       }
-
-      // axios.patch(`https://todoo.5xcamp.us/todos/${id}/toggle`, null, this.setConfig())
     }),
 
     async toggleTask(id) {
