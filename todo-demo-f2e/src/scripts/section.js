@@ -28,6 +28,7 @@ function changeSection() {
     taskName: "",
     tasks: [],
     //後續可以用this讀取或修改
+    taskValue: "",
 
     init() {
       const token = localStorage.getItem("todoToken")
@@ -62,6 +63,40 @@ function changeSection() {
       }
 
       return config
+    },
+
+    updateTodo(id) {
+      const todo = this.tasks.find((t) => {
+        return t.id == id
+      })
+
+      todo.isEditing = false
+
+      // API
+      if (todo.content != this.taskValue) {
+        todo.content = this.taskValue
+
+        const todoData = {
+          todo: {
+            content: this.taskValue,
+          },
+        }
+
+        axios.put(`https://todoo.5xcamp.us/todos/${id}`, todoData, this.setConfig())
+      }
+    },
+
+    toggleEdit(id) {
+      this.tasks.forEach((t) => (t.isEditing = false))
+
+      const todo = this.tasks.find((t) => {
+        return t.id == id
+      })
+
+      if (todo) {
+        this.taskValue = todo.content
+        todo.isEditing = !todo.isEditing
+      }
     },
 
     async doLogin() {
@@ -157,7 +192,7 @@ function changeSection() {
       }
 
       //紀錄點擊次數
-      if (todo.count == null) {
+      if (todo.count == undefined) {
         todo.count = 0
       }
       todo.count = todo.count + 1
